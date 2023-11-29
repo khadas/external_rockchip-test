@@ -35,9 +35,10 @@ module_choice()
     echo "audio test:           10 (audio test)"
     echo "camera test:          11 (camera test)"
     echo "video test:           12 (video test)"
-    echo "bluetooth test:       13 (bluetooth on off test)"
-    echo "wifi test:            14 (wifi on off test)"
-    echo "chromium test:        15 (chromium with video test)"
+    echo "bluetooth test:       13 (bluetooth test)"
+    echo "wifi test:            14 (wifi test)"
+    echo "wifibt config test:   15 (wifibt config test)"
+    echo "chromium test:        16 (chromium with video test)"
     echo "*****************************************************"
 
     read -t 30 -p "please input test moudle: " MODULE_CHOICE
@@ -80,12 +81,34 @@ suspend_resume_test()
 
 wifi_test()
 {
-    bash ${CURRENT_DIR}/wifibt/wifi_onoff.sh &
+    bin=/usr/bin/rkwifibt_app_test;
+    if [ -e "$bin" ]; then
+        $bin WiFi
+    else
+        echo "WiFiBT testfile don't exist! fallback to wifi_onff.sh"
+        bash ${CURRENT_DIR}/wifibt/wifi_onoff.sh &
+    fi
 }
 
 bluetooth_test()
 {
-    bash ${CURRENT_DIR}/wifibt/bt_onoff.sh &
+    bin=/usr/bin/rkwifibt_app_test;
+    if [ -e "$bin" ]; then
+        $bin BT
+    else
+        echo "WiFiBT testfile don't exist! fallback to bt_onoff.sh"
+        bash ${CURRENT_DIR}/wifibt/bt_onoff.sh &
+    fi
+}
+
+wifibt_config_test()
+{
+    bin=/usr/bin/rkwifibt_app_test;
+    if [ -e "$bin" ]; then
+        $bin Network
+    else
+        echo "WiFiBT testfile don't exist! "
+    fi
 }
 
 audio_test()
@@ -177,6 +200,9 @@ module_test()
 			wifi_test
 			;;
 		15)
+			wifibt_config_test
+			;;
+		16)
 			chromium_test
 			;;
 	esac

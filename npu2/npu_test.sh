@@ -32,7 +32,8 @@ npu_scale_frequency_test()
 
 rknn_demo_test()
 {
-	bash ${DIR_NPU}/rknn_demo.sh
+	cd  ${DIR_NPU}/rknn_demo
+	bash run.sh
 }
 
 case ${NPU_CHOICE} in

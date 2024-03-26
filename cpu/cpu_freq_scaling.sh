@@ -4,7 +4,8 @@ set_cpu_freq() {
     echo userspace > $1/scaling_governor
     echo $2 > $1/scaling_setspeed
     cur=`cat $1/scaling_cur_freq`
-    if [ "$cur" -eq "$2" ];then
+    min=`cat $1/scaling_min_freq`
+    if [ "$cur" -eq "$2" ] || [ "$cur" -le "$min" ];then
         echo "cpu freq policy:${d##*policy} success change to $cur KHz"
     else
         echo "cpu freq: failed change to $2 KHz, now $cur KHz"

@@ -39,6 +39,7 @@ module_choice()
     echo "wifi test:            14 (wifi test)"
     echo "wifibt config test:   15 (wifibt config test)"
     echo "chromium test:        16 (chromium with video test)"
+    echo "benchmark test:       17 (unixbench、glmark2...)"
     echo "*****************************************************"
 
     read -t 30 -p "please input test moudle: " MODULE_CHOICE
@@ -145,6 +146,11 @@ chromium_test()
     bash ${CURRENT_DIR}/chromium/chromium_test.sh
 }
 
+benchmark_test()
+{
+    bash ${CURRENT_DIR}/benchmark/benchmark_test.sh
+}
+
 power_lost_test()
 {
     fcnt=/userdata${CURRENT_DIR}/power_lost/reboot_cnt;
@@ -204,6 +210,9 @@ module_test()
 			;;
 		16)
 			chromium_test
+			;;
+		17)
+			benchmark_test
 			;;
 	esac
 }

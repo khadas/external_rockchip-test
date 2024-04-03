@@ -16,30 +16,31 @@ module_choice()
     echo "***                                                ***"
     echo "***          *****************************         ***"
     echo "***          *    ROCKCHIPS TEST TOOLS   *         ***"
-    echo "***          *  V2.3 updated on 20240325 *         ***"
+    echo "***          *  V2.4 updated on 20240403 *         ***"
     echo "***          *****************************         ***"
     echo "***                                                ***"
     echo "*****************************************************"
 
 
     echo "*****************************************************"
-    echo "ddr test:              1 (ddr stress test)"
-    echo "cpu test:              2 (cpu stress test)"
-    echo "gpu test:              3 (gpu stress test)"
-    echo "npu test:              4 (npu stress test)"
-    echo "suspend_resume test:   5 (suspend resume)"
-    echo "reboot test:           6 (auto reboot test)"
-    echo "power lost test:       7 (power lost test)"
-    echo "flash stress test:     8 (flash stress test)"
-    echo "recovery test:         9 (recovery wipe all test)"
+    echo "ddr test:             1 (ddr stress test)"
+    echo "cpu test:             2 (cpu stress test)"
+    echo "gpu test:             3 (gpu stress test)"
+    echo "npu test:             4 (npu stress test)"
+    echo "suspend_resume test:  5 (suspend resume)"
+    echo "reboot test:          6 (auto reboot test)"
+    echo "power lost test:      7 (power lost test)"
+    echo "flash stress test:    8 (flash stress test)"
+    echo "recovery test:        9 (recovery wipe all test)"
     echo "audio test:           10 (audio test)"
     echo "camera test:          11 (camera test)"
     echo "video test:           12 (video test)"
     echo "bluetooth test:       13 (bluetooth test)"
     echo "wifi test:            14 (wifi test)"
     echo "wifibt config test:   15 (wifibt config test)"
-    echo "chromium test:        16 (chromium with video test)"
-    echo "benchmark test:       17 (unixbench、glmark2...)"
+    echo "pcie test:            16 (pcie test)"
+    echo "chromium test:        17 (chromium with video test)"
+    echo "benchmark test:       18 (unixbench、glmark2...)"
     echo "*****************************************************"
 
     read -t 30 -p "please input test moudle: " MODULE_CHOICE
@@ -110,6 +111,11 @@ wifibt_config_test()
     else
         echo "WiFiBT testfile don't exist! "
     fi
+}
+
+pcie_test()
+{
+    bash ${CURRENT_DIR}/pcie/pcie_test.sh
 }
 
 audio_test()
@@ -209,9 +215,12 @@ module_test()
 			wifibt_config_test
 			;;
 		16)
-			chromium_test
+			pcie_test
 			;;
 		17)
+			chromium_test
+			;;
+		18)
 			benchmark_test
 			;;
 	esac

@@ -2,8 +2,8 @@
 
 RESULT_DIR=/userdata/rockchip-test/
 RESULT_LOG=${RESULT_DIR}/suspend_resume.txt
-SUSPEND_MIN=60  # Ensure minimum suspend time is 60 seconds
-WAKE_MIN=5
+SUSPEND_TIME=60  # Fixed suspend time to 60 seconds (1 minute)
+WAKE_DELAY=5     # Delay after wake-up before next action
 MAX_CYCLES=10000
 
 # Enable Debug
@@ -16,13 +16,15 @@ if [ ! -e "/sys/class/rtc/rtc0/wakealarm" ]; then
     exit 1
 fi
 
+
+# Function to generate random number
+# random() {
+#   hexdump -n 2 -e '/2 "%u"' /dev/urandom
+# }
+
 # Create result directory
 mkdir -p ${RESULT_DIR}
 
-# Function to generate random number
-random() {
-  hexdump -n 2 -e '/2 "%u"' /dev/urandom
-}
 
 auto_suspend_resume_rtc() {
     cnt=0
@@ -34,20 +36,16 @@ auto_suspend_resume_rtc() {
     while [ $cnt -lt $MAX_CYCLES ]; do
         echo "Completed $cnt suspend/resume cycles"
 
-        # Calculate suspend time to ensure it's at least 60 seconds
-        sus_time=$(( ( $(random) % $SUSPEND_MIN ) + $SUSPEND_MIN ))
-        echo "Sleeping for $sus_time seconds"
-        # Clear previous wakealarm and set new wake time
+        # Set new wake time 1 minute into the future
         echo 0 > /sys/class/rtc/rtc0/wakealarm
-        echo "+${sus_time}" > /sys/class/rtc/rtc0/wakealarm
+        echo "+${SUSPEND_TIME}" > /sys/class/rtc/rtc0/wakealarm
         pm-suspend
 
-        # Calculate wake time, ensuring at least 30 seconds of wake time
-        wake_time=$(( ( $(random) % $WAKE_MIN ) + $WAKE_MIN ))
-        echo "Waking for $wake_time seconds"
-        sleep $wake_time
+	echo "Waking for $WAKE_DELAY seconds"
+        # System wakes up here
+        sleep $WAKE_DELAY  # Wait for 5 seconds after wake-up
 
-        echo "$(date): Cycle: $cnt - Sleep: $sus_time Wake: $wake_time" >> ${RESULT_LOG}
+        echo "$(date): Cycle: $cnt - Sleep: $SUSPEND_TIME Wake Delay: $WAKE_DELAY" >> ${RESULT_LOG}
 
         cnt=$((cnt + 1))
     done

@@ -2,6 +2,8 @@ mkdir -p /userdata/rockiva_data
 
 export LD_LIBRARY_PATH=/rockchip-test/npu2/rknn_demo/
 
+echo performance | tee $(find /sys/ -name *governor) > /dev/null 2>&1 || true
+
 /etc/init.d/S49weston stop
 sync
 cp -pf object_detection_v3_cls8.data /userdata/rockiva_data

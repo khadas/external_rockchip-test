@@ -30,21 +30,12 @@ npu_scale_frequency_test()
 	bash ${DIR_NPU}/npu_freq_scaling.sh 86400 2
 }
 
-rknn_demo_test()
-{
-	cd  ${DIR_NPU}/rknn_demo
-	bash run.sh
-}
-
 case ${NPU_CHOICE} in
 	1)
 		npu_stress_test
 		;;
 	2)
 		npu_scale_frequency_test
-		;;
-	3)
-		rknn_demo_test
 		;;
 	*)
 		echo "not found your input."

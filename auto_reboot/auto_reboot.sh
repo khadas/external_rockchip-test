@@ -53,13 +53,20 @@ if [ $cnt != "off" ]; then
         echo "check console-ramoops-0 message"
         grep -q "Restarting system" /sys/fs/pstore/console-ramoops-0
         if [ $? -ne 0 -a $cnt -ge 2 ]; then
-           echo "no found 'Restarting system' log in last time kernel message"
-           echo "consider kernel crash in last time reboot test"
-           echo "quit reboot test"
-            rm -rf /userdata/rockchip-test/auto_reboot.sh
-            rm -rf /userdata/rockchip-test/reboot_total_cnt
-            sync
-	   exit 1
+		echo "no found 'Restarting system' log in last time kernel message"
+		grep -q "panic" /sys/fs/pstore/console-ramoops-0
+		if [ $? -eq 0 ]; then
+			echo "Found 'panic' log in last kernel message"
+			echo "Consider kernel crash in last reboot test"
+			echo "Quit reboot test"
+			rm -rf /userdata/rockchip-test/auto_reboot.sh
+			rm -rf /userdata/rockchip-test/reboot_total_cnt
+			sync
+			exit 1
+		else
+			echo "Warning: Maybe Potential data loss in last reboot"
+			reboot
+		fi
         else
 	   reboot
         fi
